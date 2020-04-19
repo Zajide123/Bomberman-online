@@ -1,0 +1,279 @@
+
+body {
+    background-color: #ced3d388;
+    font-family: 'Ubuntu', sans-serif;
+	margin-left:5%;
+	margin-right:5%;
+}
+
+.main {
+    background-color: #FFFFFF;
+    width: 400px;
+    height: 400px;
+    margin: 50em auto;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+.players {
+	padding-left:30px;
+	padding-right:30px;
+	padding-bottom:20px;
+	line-height:3;
+}
+#cele {
+    background-color: #FFFFFF;
+	text-align:center;
+	display:block;
+    width: 100%;
+    height: auto;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+	position: center;
+}
+#prvy {
+    background-color: #FFFFFF;
+	display:block;
+	text-align:center;
+    width: 48%;
+    height: auto;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+	float:left;
+	margin-left:5px;
+}
+#druhy {
+    background-color: #FFFFFF;
+	display:block;
+    width: 48%;
+    height: auto;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+	float:right;
+	margin-bottom:3%;
+}
+
+#treti {
+    background-color: #FFFFFF;
+	display:block;
+    width: 48%;
+    height: auto;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+	float:right;
+}
+#settings {
+    background-color: #FFFFFF;
+	text-align:center;
+	display:block;
+    width: 600px;
+    height: auto;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+	position: center;
+    margin: auto;
+}
+
+.sign {
+    padding-top: 40px;
+    color: #8C55AA;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    font-size: 23px;
+}
+
+.un {
+width: 76%;
+color: rgb(38, 50, 56);
+font-weight: 700;
+font-size: 14px;
+letter-spacing: 1px;
+background: rgba(136, 126, 126, 0.04);
+padding: 10px 20px;
+border: none;
+border-radius: 20px;
+outline: none;
+box-sizing: border-box;
+border: 2px solid rgba(0, 0, 0, 0.02);
+margin-bottom: 50px;
+margin-left: 46px;
+text-align: center;
+margin-bottom: 27px;
+font-family: 'Ubuntu', sans-serif;
+}
+
+form.form1 {
+    padding-top: 40px;
+}
+
+
+.un:focus, .pass:focus {
+    border: 2px solid rgba(0, 0, 0, 0.18) !important;
+    
+}
+
+.Button {
+    cursor: pointer;
+      border-radius: 5em;
+      color: #fff;
+      background: linear-gradient(to right,#666666ff, #9d9d9dff);
+      border: 0;
+      padding-left: 45px;
+      padding-right: 50px;
+      padding-bottom: 15px;
+      padding-top: 15px;
+      font-family: 'Ubuntu', sans-serif;
+      font-size: 13px;
+      box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+      display: block;
+      position:middle;
+      margin: auto;
+      margin-top: 5%;
+     
+  }
+  .Button:hover {
+    cursor: pointer;
+    border-radius: 5em;
+    color: #fff;
+    background: linear-gradient(to right, rgb(93, 71, 97), rgb(187, 136, 196));
+    border: 0;
+    padding-left: 45px;
+    padding-right: 50px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 13px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    display: block;
+    position:middle;
+    margin: auto;
+    margin-top: 5%;
+  }
+  .BackButton {
+    cursor: pointer;
+      border-radius: 5em;
+      color: #fff;
+      background: linear-gradient(to right, #666666ff, #9d9d9dff);
+      border: 0;
+      padding-left: 45px;
+      padding-right: 50px;
+      padding-bottom: 15px;
+      padding-top: 15px;
+      font-family: 'Ubuntu', sans-serif;
+      font-size: 20px;
+      box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+      position:right;
+      margin: auto;
+      margin-top: 5%;
+     
+  }
+  .BackButton:hover {
+    cursor: pointer;
+    border-radius: 5em;
+    color: #fff;
+    background: linear-gradient(to right, rgb(93, 71, 97), rgb(187, 136, 196));
+    border: 0;
+    padding-left: 45px;
+    padding-right: 50px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+
+    position:right;
+    margin: auto;
+    margin-top: 5%;
+  }
+  .StartButton {
+    cursor: pointer;
+      border-radius: 5em;
+      color: #fff;
+      background: linear-gradient(to right, red, #ff555588);
+      border: 0;
+      padding-left: 45px;
+      padding-right: 50px;
+      padding-bottom: 15px;
+      padding-top: 15px;
+      font-family: 'Ubuntu', sans-serif;
+      font-size: 20px;
+      box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+	  float:right;
+      margin: auto;
+      margin-top: 5%;
+     
+  }
+  .StartButton:hover {
+    cursor: pointer;
+    border-radius: 5em;
+    color: #fff;
+    background: linear-gradient(to right, rgb(93, 71, 97), rgb(187, 136, 196));
+    border: 0;
+    padding-left: 45px;
+    padding-right: 50px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+	float:right;
+    margin: auto;
+    margin-top: 5%;
+  }
+.forgot {
+    text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+    color: #E1BEE7;
+    padding-top: 15px;
+}
+
+a {
+    text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+    color: #E1BEE7;
+    text-decoration: none
+}
+
+.slidecontainer {
+  width: 80%;
+  margin:10%;
+
+}
+
+.slider {
+  -webkit-appearance: none; 
+  appearance: none;
+  width: 100%; 
+  height: 3px; 
+  outline: none;
+  opacity: 0.7; 
+  -webkit-transition: .2s;
+   background:  #9d9d9dff;
+  transition: opacity .2s;
+}
+
+
+.slider:hover {
+  opacity: 1; 
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #666666ff;
+  appearance: none;
+  border-radius: 1.5em;
+  width: 25px;
+  height: 25px;
+  cursor: pointer; 
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 1.5em;
+  background: #666666ff; 
+  cursor: pointer; 
+}
+
+@media (max-width: 600px) {
+    .main {
+        border-radius: 0px;
+    }
+}

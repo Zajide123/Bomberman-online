@@ -1,0 +1,166 @@
+
+   <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;">
+   </canvas>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        //game
+        var ctx= document.getElementById("ctx").getContext("2d");
+        ctx.font='30px Arial';
+
+        var socket = io();
+        //wall
+    var Wall = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.x = initPack.x;
+        self.y = initPack.y;
+      
+		return self;
+	}
+    Wall.list = {};
+    var Box = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.x = initPack.x;
+        self.y = initPack.y;
+      
+		return self;
+	}
+    Box.list = {};
+    
+        //player
+        var Player = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.number = initPack.number;
+		self.x = initPack.x;
+        self.y = initPack.y;
+        self.score=initPack.score;
+        Player.list[self.id] = self;
+        
+		return self;
+	}
+	Player.list = {};
+
+		//bomba
+	var Bomb = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.x = initPack.x;
+		self.y = initPack.y;
+		Bomb.list[self.id] = self;		
+		return self;
+	}
+	Bomb.list = {};
+// init
+        socket.on('init',(data)=>{
+            console.log(data);
+            for(var i =0; i<data.player.length;i++)
+                new Player(data.player[i]);
+            for(var i=0 ; i<data.bomb.length;i++)
+                new Bomb(data.bomb[i]);
+          
+       /*     for(var i=0 ; i<data.box.length;i++)
+                new Box(data.box[i]);
+            */
+            if(data.wall)
+            {
+            for(var i=0 ; i<data.wall.length;i++)
+                 new Wall(data.wall[i]);
+                }
+        });
+       
+        // upd 
+        socket.on('update',(data)=>{
+            for(var i = 0;i<data.player.length;i++){
+                var pack=data.player[i];
+                var p =Player.list[pack.id]
+                if(p){
+                    if(pack.x !== undefined)
+                        p.x=pack.x;
+                    if(pack.y !== undefined)
+                    p.y=pack.y;
+                    if(pack.score !== undefined)
+                    p.score=pack.score;    
+                }
+            }
+            for(var i = 0;i<data.bomb.length;i++){
+            var pack=data.bomb[i];
+            var b = Bomb.list[pack.id]
+                if(b){
+                    if(pack.x !== undefined)
+                        b.x=pack.x;
+                    if(pack.y !== undefined)
+                    b.y=pack.y;
+                }
+             }
+             for(var i = 0;i<data.box.length;i++){
+            var pack=data.box[i];
+            var b = Box.list[pack.id]
+                if(b){
+                    if(pack.x !== undefined)
+                        b.x=pack.x;
+                    if(pack.y !== undefined)
+                    b.y=pack.y;
+                }
+             }
+        });
+
+        //remove
+        socket.on('remove',function(data){
+            console.log('tu som ')
+		for(var i = 0 ; i < data.player.length; i++){
+            ctx.fillText("X",Player.list[data.player[i]].x,Player.list[data.player[i]].y);
+            console.log('zomrel hrac' +data.player[i]);
+			delete Player.list[data.player[i]];
+		}
+		for(var i = 0 ; i < data.bomb.length; i++){
+			delete Bomb.list[data.bomb[i]];
+        }
+        for(var i = 0 ; i < data.box.length; i++){
+			delete Box.list[data.box[i]];
+		}
+	});
+//draw 
+
+setInterval(function(){
+		ctx.clearRect(0,0,500,500);
+		for(var i in Player.list)
+			ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y);
+		for(var i in Bomb.list)
+            ctx.fillRect(Bomb.list[i].x-5,Bomb.list[i].y-5,10,10);
+        for(var i in Wall.list)
+        ctx.fillText("w",Wall.list[i].x,Wall.list[i].y);
+        for(var i in Box.list)
+        ctx.fillText("B",Box.list[i].x,Box.list[i].y);
+	},40);
+
+        
+        // controls on client 
+        document.onkeydown = function (event){
+            if(event.keyCode === 68) //d 
+            socket.emit('keyPress',{inputId:'right',state:true});
+        else if(event.keyCode === 83) //s
+            socket.emit('keyPress',{inputId:'down',state:true});
+        else if(event.keyCode === 65) //a
+            socket.emit('keyPress',{inputId:'left',state:true});
+        else if(event.keyCode === 87) //w
+            socket.emit('keyPress',{inputId:'up',state:true});
+        else if(event.keyCode === 32) // space
+            socket.emit('keyPress',{inputId:'space',state:true});
+        }
+
+        document.onkeyup = function (event){
+            if(event.keyCode === 68) //d 
+            socket.emit('keyPress',{inputId:'right',state:false});
+        else if(event.keyCode === 83) //s
+            socket.emit('keyPress',{inputId:'down',state:false});
+        else if(event.keyCode === 65) //a
+            socket.emit('keyPress',{inputId:'left',state:false});
+        else if(event.keyCode === 87) //w
+            socket.emit('keyPress',{inputId:'up',state:false});
+        else if(event.keyCode === 32) //  space
+            socket.emit('keyPress',{inputId:'space',state:false});
+        
+        }
+    </script>
