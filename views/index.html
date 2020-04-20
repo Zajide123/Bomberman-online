@@ -3,23 +3,25 @@
     <img src="./images/Logo.png" alt="Bomberman Online" style="float:center" >
 
     </header>
-    <div style="display:block;margin: 3%;width: 15%;height:15%;">
+    <div style="display:block; margin: 0 auto ;width: 100px;height:100px;">
    <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;">
     </div>
    </canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         //game
+        var socket = io();
         var ctx= document.getElementById("ctx").getContext("2d");
         ctx.font='30px Arial';
 
-        var socket = io();
+       
         //wall
     var Wall = function(initPack){
 		var self = {};
 		self.id = initPack.id;
 		self.x = initPack.x;
         self.y = initPack.y;
+        Wall.list[self.id] = self;
       
 		return self;
 	}
@@ -29,6 +31,7 @@
 		self.id = initPack.id;
 		self.x = initPack.x;
         self.y = initPack.y;
+        Box.list[self.id] = self;
       
 		return self;
 	}
@@ -60,20 +63,16 @@
 	Bomb.list = {};
 // init
         socket.on('init',(data)=>{
-            console.log(data);
             for(var i =0; i<data.player.length;i++)
                 new Player(data.player[i]);
             for(var i=0 ; i<data.bomb.length;i++)
                 new Bomb(data.bomb[i]);
-          
-       /*     for(var i=0 ; i<data.box.length;i++)
+            for(var i=0 ; i<data.box.length;i++)
                 new Box(data.box[i]);
-            */
-            if(data.wall)
-            {
             for(var i=0 ; i<data.wall.length;i++)
-                 new Wall(data.wall[i]);
-                }
+                new Wall(data.wall[i]);
+          
+
         });
        
         // upd 
@@ -110,11 +109,20 @@
                     b.y=pack.y;
                 }
              }
+             for(var i = 0;i<data.wall.length;i++){
+            var pack=data.wall[i];
+            var b = Wall.list[pack.id]
+                if(b){
+                    if(pack.x !== undefined)
+                        b.x=pack.x;
+                    if(pack.y !== undefined)
+                    b.y=pack.y;
+                }
+             }
         });
 
         //remove
         socket.on('remove',function(data){
-            console.log('tu som ')
 		for(var i = 0 ; i < data.player.length; i++){
             ctx.fillText("X",Player.list[data.player[i]].x,Player.list[data.player[i]].y);
             console.log('zomrel hrac' +data.player[i]);

@@ -66,8 +66,10 @@ var Wall=(x,y)=>{
     self.id= Math.random();
     // bude zaberat viac ako jeden pixel,
     self.weight;
+    
+    var super_update = self.update;
     self.update=()=>{
-       
+        super_update ();
     }
     Wall.list[self.id]=self;
     
@@ -87,7 +89,10 @@ var Box=(x,y)=>{
     self.y=y;
     self.id= Math.random();
     self.toRemove=false;
+    
+    var super_update = self.update;
     self.update=()=>{
+        super_update();
     }
    
     Box.list[self.id]=self;
@@ -96,7 +101,6 @@ var Box=(x,y)=>{
         x:self.x,
         y:self.y,
     })
-    console.log(initPack);
     return self;
 
 };
@@ -110,14 +114,13 @@ Box.update=()=>{
       box.update();
       if(box.toRemove){
           delete Box.list[i];
-          removePack.box.push(bomb.id);
+          removePack.box.push(box.id);
       }
       
      pack.push({
         id:box.id,
         x:box.x,
         y:box.y,
-      // do bomby sa prida cislo kolko ich bolo pouzitych
      })
   }
   return pack;
@@ -233,11 +236,45 @@ var Bomb=(id,x,y)=>{
         
             }
         }*/
-        self.toRemove=true;  
+        //for box 
+        for(var i in Box.list){
+            var p=Box.list[i]
+            if(
+                (
+                        //player P<-Bomb->P
+                        (p.x>self.x-self.radius & p.x<self.x+self.radius )
+                        &(
+                            (p.y>self.y-self.blastHeight & p.y<self.y+self.blastHeight )
+                        )
+                        //wall betwen them
+                    
+                )
+                ||
+                (
+                        //player
+                        (p.y>self.y-self.radius & p.y<self.y+self.radius )
+                        &(
+                            (p.x>self.x-self.blastHeight & p.x<self.x+self.blastHeight )
+                        )
+                        //wall betwen them
+                    
+            )
+            ){
+                Box.list[i].toRemove=true;
+                    
+
+
+            }
+
+
+    //}
+            } 
+            self.toRemove=true; 
+         }
                   
            
-
-        }
+        
+        
              
             
             
@@ -342,18 +379,28 @@ var Player =(id)=>{
 Player.list={};
 // on player conection + controll
 //calls player constructor
+var drawmap=false;
+map={
+    "box":[
+        {"x":258,"y":368}
+    ],
+    "wall":[{"x":288,"y":368},{"x":300,"y":368}
+]
+}
 Player.onConnect=(socket)=>{
-    var map={ "box":[  {"x":258,"y":368} ], "wall":[{"x":258,"y":368},{"x":288,"y":388} ] }    
-           
-    for(i in map.box){
-        Box(map.box[i].x,map.box[i].y)
-        
-    }
-    for(i in map.wall){
-      Wall(map.wall[i].x,map.wall[i].y)
-      
-     }
+    
     var player=Player(socket.id);
+    if(!drawmap){
+        for(i in map.box){
+            Box(map.box[i].x,map.box[i].y)
+        }
+        for(i in map.wall){
+            Wall(map.wall[i].x,map.wall[i].y)
+        }
+drawmap=true;
+
+    }
+
     socket.on('keyPress',(data)=>{
         if(data.inputId === 'left')
             player.pressingLeft=data.state;
@@ -385,9 +432,28 @@ Player.onConnect=(socket)=>{
             y:Bomb.list[i].y,
         })
     }
+    var boxs=[];
+    for(var i in Box.list){
+        boxs.push({
+            id:Box.list[i].id,
+            x:Box.list[i].x,
+            y:Box.list[i].y,
+        })
+    }
+    var walls=[];
+    for(var i in Wall.list){
+        walls.push({
+            id:Wall.list[i].id,
+            x:Wall.list[i].x,
+            y:Wall.list[i].y,
+        })
+    }
+    console.log(walls,boxs)
     socket.emit('init',{
         player:players,
-        bomb:bombs
+        bomb:bombs,
+        box:boxs,
+        wall:walls
     })
 };
 Player.onDisconect=(socket)=>{
@@ -420,6 +486,7 @@ Player.update=()=>{
       
 
   var io = require('socket.io').listen(server);
+  
   // call fcion for new conection 
   io.sockets.on('connection',function(socket){
       // creating socket id
@@ -442,15 +509,17 @@ Player.update=()=>{
      
   });
 // beh hry 
-  var initPack={box:[],wall:[],player:[],bomb:[]};
+  var initPack={player:[],bomb:[],box:[],wall:[]};
   var removePack={player:[],bomb:[],box:[]};
 
 
   setInterval(function(){
+   
       var pack = {
             player:Player.update(),
             bomb:Bomb.update(),
-            box:Box.update()
+            box:Box.update(),
+            wall:initPack.wall
       };
   
     // send it to every socket conected
@@ -461,6 +530,7 @@ Player.update=()=>{
         socket.emit('remove',removePack);
         
     }
+    console.log(initPack)
     initPack.player=[];
     initPack.bomb=[];
     initPack.box=[];
