@@ -18,9 +18,14 @@
         <div class="main">
             <p class="sign" align="center">Main Menu</p>
             <a href='/newGame'> <button  class="menuButton" align="center" >new Game</button></a>
+            <% if(isLogedIn) { %>
             <a href='/settings'> <button  class="menuButton" align="center" >settings</button></a>
             <a href='/score'> <button  class="menuButton" align="center" >  Score</button></a>
-            <a href='/'> <button  class="menuButton" align="center" >log out</button></a>
+            <form action="/logout" method="POST">
+             <button  class="menuButton" align="center" type="submit">log out</button>
+            </form>
+            
+            <%  } %>
         </div>            
                 
     </main>

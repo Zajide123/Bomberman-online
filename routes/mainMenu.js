@@ -6,6 +6,10 @@ const rootDir = require('../util/path');
 
 const router = express.Router();
 router.get('/mainMenu', (req, res, next) => {
-    res.render('mainMenu',{pageTitle:'Page Not Found'});
+  
+  
+    res.render('mainMenu',{pageTitle:'Main menu',
+    isLogedIn:req.session.isLoggedIn});
+    
   });
   module.exports = router;

@@ -1,11 +1,21 @@
 const path = require('path');
 
 const express = require('express');
-
-const rootDir = require('../util/path');
+const TopScore=require('../models/topScore');
 
 const router = express.Router();
 router.get('/score', (req, res, next) => {
-  res.render('score',{pageTitle:'score'});
+  if(!req.session.isLoggedIn){
+    return res.redirect('/')
+  }
+  TopScore.findById('1').
+  then(([rows,data])=>{
+    console.log(rows);
+    res.render('score',{pageTitle:'score',
+    score:rows
+  });
+  })
+  .catch(err=>{console.log(err)});
+  
 });
   module.exports = router;

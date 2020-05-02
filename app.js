@@ -4,6 +4,9 @@ var PORT = process.env.PORT || 3000 ;
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const session=require('express-session');
+var MSSQLStore = require('connect-mssql')(session);
+
 //
 // inports
 const loginRoutes = require('./routes/login');
@@ -20,12 +23,36 @@ const app = express();
 app.set('view engine','ejs');
 //kde su views 
 app.set('views','views');
+app.set('trust proxy',1);
+
+// conf 
+var config = {
+    server: 'eu-cdbr-west-03.cleardb.net',
+    user :'b81dd870c779dc',
+    database:'heroku_809879640b9cbc4',
+    password: '7a8a865a'
+
+    
+    
+}
+
+
+ 
 // it will take html too
+
+
+app.use(session({
+    secret:'supersecret',
+    resave:false,
+    saveUninitialized:false,
+  
+}));
 app.engine('html', require('ejs').renderFile);
 
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static(path.join(__dirname, 'public')));
+
 /*
 db.execute('SELECT * FROM registered_user ')
 .then(result=> {
@@ -57,7 +84,7 @@ app.use((req,res,next)=>{
 // hra 
 //socket list
 var  SOCKET_LIST={};
-var Entity=require('./model/Entity');
+var Entity=require('./models/Entity');
 
 var Wall=(x,y)=>{
     var self= Entity();
@@ -150,11 +177,11 @@ var Bomb=(id,x,y)=>{
             {
                 
                 var p = Player.list[i];
-               /* if(Wall.list !={}){
-                    console.log('ctt robim');
+                 if(Wall.list !={}){
                     for(var j in Wall.list)
-                    {   var w= Wall.list[i];
-                        console.log('co tu robim');
+                    {   var w= Wall.list[j];
+                        console.log(w);
+                        console.log(Wall.list)
                         if(
                             (
                                     //player P<-Bomb->P
@@ -191,8 +218,8 @@ var Bomb=(id,x,y)=>{
                                 droper.score++
                         }
                     }
-                }*/
-               // else{
+                }
+                else{
                         if(
                             (
                                     //player P<-Bomb->P
@@ -223,7 +250,7 @@ var Bomb=(id,x,y)=>{
                         }
 
 
-                //}
+                }
             }
             /*
         for(var i in Box.list)
@@ -448,7 +475,6 @@ drawmap=true;
             y:Wall.list[i].y,
         })
     }
-    console.log(walls,boxs)
     socket.emit('init',{
         player:players,
         bomb:bombs,
@@ -530,7 +556,6 @@ Player.update=()=>{
         socket.emit('remove',removePack);
         
     }
-    console.log(initPack)
     initPack.player=[];
     initPack.bomb=[];
     initPack.box=[];
