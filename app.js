@@ -192,9 +192,9 @@ var Bomb=(id,x,y)=>{
                // <-x
                else  if (((p.x<self.x & p.x>self.x-self.radius) & (p.y>self.y-self.blastHeight & p.y<self.y+self.blastHeight  ) )) DestroyPackL.push(p);
                 // up
-                else  if (((p.y<self.y & p.y>self.y-self.radius) & (p.x>self.x-self.blastHeight & p.x<self.y+self.blastHeight  ) )) DestroyPackU.push(p);
+                else  if (((p.y<self.y & p.y>self.y-self.radius) & (p.x>self.x-self.blastHeight & p.x<self.x+self.blastHeight  ) )) DestroyPackU.push(p);
                 // down
-                else if (((p.y>self.y & p.y<self.y+self.radius) & (p.x>self.x-self.blastHeight & p.x<self.y+self.blastHeight  ) )) DestroyPackD.push(p);
+                else if (((p.y>self.y & p.y<self.y+self.radius) & (p.x>self.x-self.blastHeight & p.x<self.x+self.blastHeight  ) )) DestroyPackD.push(p);
             }
             for (var i in Box.list){
                 var p = Box.list[i];
@@ -203,9 +203,9 @@ var Bomb=(id,x,y)=>{
                // <-x
                else  if (((p.x<self.x & p.x>self.x-self.radius) & (p.y>self.y-self.blastHeight & p.y<self.y+self.blastHeight ) )) DestroyPackL.push(p);
                 // up
-                else  if (((p.y<self.y & p.y>self.y-self.radius) & (p.x>self.x-self.blastHeight & p.x<self.y+self.blastHeight  ) )) DestroyPackU.push(p);
+                else  if (((p.y<self.y & p.y>self.y-self.radius) & (p.x>self.x-self.blastHeight & p.x<self.x+self.blastHeight  ) )) DestroyPackU.push(p);
                 // down
-                else if (((p.y>self.y & p.y<self.y+self.radius) & (p.x>self.x-self.blastHeight & p.x<self.y+self.blastHeight  ) )) DestroyPackD.push(p);
+                else if (((p.y>self.y & p.y<self.y+self.radius) & (p.x>self.x-self.blastHeight & p.x<self.x+self.blastHeight  ) )) DestroyPackD.push(p);
             }
             for (var i in Wall.list){
                 var p = Wall.list[i];
@@ -232,7 +232,7 @@ var Bomb=(id,x,y)=>{
             {
                 toDestroyR=DestroyPackR[0];
                 for(i=0;i<DestroyPackR.length-1;i++)
-            {toDestroyRC++
+            {
                 
                     if (toDestroyR.x>DestroyPackR[i].x);
                     else
@@ -248,7 +248,7 @@ var Bomb=(id,x,y)=>{
                 toDestroyL=DestroyPackL[0];
                 for(i=0;i<DestroyPackL.length-1;i++)
             {
-                toDestroyLC++
+                
                     if (toDestroyL.x<DestroyPackL[i].x)
                     ;
                else 
@@ -267,7 +267,7 @@ var Bomb=(id,x,y)=>{
             {
                 toDestroyU=DestroyPackU[0];
                 for(i=0;i<DestroyPackU.length-1;i++)
-            {toDestroyUC++
+            {
                 
                     if (toDestroyU.y<DestroyPackU[i].y)
                     ;
@@ -282,7 +282,7 @@ var Bomb=(id,x,y)=>{
 
                 toDestroyD=DestroyPackD[0];
                 for(i=0;i<DestroyPackD.length-1;i++)
-                {toDestroyDC++
+                {
                     
                         if (toDestroyD.y>DestroyPackD[i].y)
                     ;
