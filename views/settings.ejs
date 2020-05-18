@@ -3,7 +3,8 @@
 
 
 <head>
-    <link rel="stylesheet" href="./css/newgame.css">
+	<link rel="stylesheet" href="./css/newgame.css">
+	<link rel="stylesheet" href="./css/login.css">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><%=pageTitle%></title>
@@ -20,17 +21,20 @@
 	
 	<div id="settings">
 	<h2 style="background-color: #edefef88; border-radius: 1.5em; padding:20px;">Settings</h2>
+	<form class="form1" action="/settings" method="POST">
 	<h3> Music Sound </h3>
 	<div class="slidecontainer">
-		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+		<input type="range" min="1" max="100" value="50" class="slider" id="music" name="music">
 
 	</div>
 	<h3> Tapping Sound </h3>
-	<div class="slidecontainer" style="padding-bottom:10%;">
-		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+	<div class="slidecontainer" style="padding-bottom:10%;" >
+		<input type="range" min="1" max="100" value="50" class="slider"  id="sounds" name="sounds">
 
 	</div>
-
+	<button type="submit" class="submit" align="center">Save</button>
+</form>
+	
 	</div>
 
     </main>

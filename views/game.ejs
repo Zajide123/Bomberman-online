@@ -7,22 +7,75 @@
    <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;">
     </div>
    </canvas>
+   <audio id="sound"  src="./music/background.mp3" type="audio/mpeg" loop="true" ></audio>
+   <audio id="bomb_placed"  src="./music/pfrd.mp3" type="audio/mpeg"></audio>
+   <audio id="boom" src="./music/bum.mp3" type="audio/mpeg"></audio>
+   <audio id="moving"  src="./music/ftftft.mp3" type="audio/mpeg" loop="true" ></audio>
+   <iframe src="./music/ftftft.mp3" id="Cmoving" style="display: none"></iframe>
+
+   
     <script src="/socket.io/socket.io.js"></script>
     <script>
         //game
-        var socket = io();
+      var idcko=  '<%=id%>';
+        var socket = io()
+        if (idcko!= 'id')
+        socket.emit('id',{id:idcko})
         var ctx= document.getElementById("ctx").getContext("2d");
         ctx.font='30px Arial';
+        var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+  if (!isChrome){
+   
+  //  document.getElementById('Cmoving').play();;
+    
+  }
+  else {
+   
 
-       
+  }
+  var music=document.getElementById('sound');
+    var bomb_placed=document.getElementById('bomb_placed');
+    var boom=document.getElementById('boom');
+    var moving=document.getElementById('moving');
+    var loged='<%=isLoggedIn%>';
+    if(loged){
+        music.volume='<%=music%>'/100;
+        bomb_placed.volume='<%=sounds%>'/100;
+        boom.volume='<%=sounds%>'/100;
+        moving.volume='<%=sounds%>'/100;
+    }
+    else
+    {moving.volume=0.01;}
+    
+        
+    
+        
+//imgs
+       var Img ={};
+       Img.player= new Image();
+       Img.player.src='./images/player_img.png';
+       Img.bomb= new Image();
+       Img.bomb.src='./images/bomb.png';
+       Img.wall= new Image();
+       Img.wall.src='./images/walls.png';
+       Img.box= new Image();
+       Img.box.src= './images/box.png';
         //wall
     var Wall = function(initPack){
+        
 		var self = {};
 		self.id = initPack.id;
 		self.x = initPack.x;
         self.y = initPack.y;
+        self.draw = function(){
+            var width=Img.player.width;
+        var height=Img.player.height;
+        ctx.drawImage(Img.wall,0,0,Img.player.width,Img.player.height,self.x-width/2,self.y-height/2,width,height);
+		
+        
+        };
         Wall.list[self.id] = self;
-      
+        
 		return self;
 	}
     Wall.list = {};
@@ -31,6 +84,13 @@
 		self.id = initPack.id;
 		self.x = initPack.x;
         self.y = initPack.y;
+        self.draw = function(){
+            var width=Img.player.width;
+            var height=Img.player.height;
+        ctx.drawImage(Img.box,0,0,Img.player.width,Img.player.height,self.x-width/2,self.y-height/2,width,height);
+		
+           
+        };
         Box.list[self.id] = self;
       
 		return self;
@@ -45,6 +105,12 @@
 		self.x = initPack.x;
         self.y = initPack.y;
         self.score=initPack.score;
+        self.draw = function(){
+        var width=Img.player.width;
+        var height=Img.player.height;
+        ctx.drawImage(Img.player,0,0,Img.player.width,Img.player.height,self.x-width/2,self.y-height/2,width,height);
+		
+        };
         Player.list[self.id] = self;
         
 		return self;
@@ -56,13 +122,21 @@
 		var self = {};
 		self.id = initPack.id;
 		self.x = initPack.x;
-		self.y = initPack.y;
+        self.y = initPack.y;
+        self.draw = function(){
+            var width=Img.bomb.width;
+        var height=Img.bomb.height;
+        ctx.drawImage(Img.bomb,0,0,Img.bomb.width,Img.bomb.height,self.x-width,self.y-height,width,height);
+		
+        };
 		Bomb.list[self.id] = self;		
 		return self;
-	}
+    }
+    
 	Bomb.list = {};
 // init
         socket.on('init',(data)=>{
+            music.play();
             for(var i =0; i<data.player.length;i++)
                 new Player(data.player[i]);
             for(var i=0 ; i<data.bomb.length;i++)
@@ -124,55 +198,68 @@
         //remove
         socket.on('remove',function(data){
 		for(var i = 0 ; i < data.player.length; i++){
-            ctx.fillText("X",Player.list[data.player[i]].x,Player.list[data.player[i]].y);
-            console.log('zomrel hrac' +data.player[i]);
+            
 			delete Player.list[data.player[i]];
 		}
 		for(var i = 0 ; i < data.bomb.length; i++){
-			delete Bomb.list[data.bomb[i]];
+            delete Bomb.list[data.bomb[i]]; 
+            boom.play();
         }
         for(var i = 0 ; i < data.box.length; i++){
 			delete Box.list[data.box[i]];
 		}
 	});
 //draw 
+var MoveSound =()=>{
+    moving.play();
 
+}
+var dropSound =()=>{
+  bomb_placed.currentTime=0;
+    bomb_placed.play();
+
+}
 setInterval(function(){
-		ctx.clearRect(0,0,500,500);
-		for(var i in Player.list)
-			ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y);
-		for(var i in Bomb.list)
-            ctx.fillRect(Bomb.list[i].x-5,Bomb.list[i].y-5,10,10);
+        ctx.clearRect(0,0,500,500);
+        
+        for(var i in Player.list)
+        	Player.list[i].draw();
+        for(var i in Bomb.list)
+        Bomb.list[i].draw();
+            
         for(var i in Wall.list)
-        ctx.fillText("w",Wall.list[i].x,Wall.list[i].y);
+        Wall.list[i].draw();
         for(var i in Box.list)
-        ctx.fillText("B",Box.list[i].x,Box.list[i].y);
+        Box.list[i].draw();
 	},40);
 
         
         // controls on client 
         document.onkeydown = function (event){
-            if(event.keyCode === 68) //d 
+            if(event.keyCode === 68)
+            { //d 
             socket.emit('keyPress',{inputId:'right',state:true});
-        else if(event.keyCode === 83) //s
+            MoveSound();}
+        else if(event.keyCode === 83) {//s
             socket.emit('keyPress',{inputId:'down',state:true});
-        else if(event.keyCode === 65) //a
-            socket.emit('keyPress',{inputId:'left',state:true});
-        else if(event.keyCode === 87) //w
-            socket.emit('keyPress',{inputId:'up',state:true});
-        else if(event.keyCode === 32) // space
-            socket.emit('keyPress',{inputId:'space',state:true});
+            MoveSound();}
+        else if(event.keyCode === 65) {//a
+            socket.emit('keyPress',{inputId:'left',state:true});MoveSound();}
+        else if(event.keyCode === 87){ //w
+            socket.emit('keyPress',{inputId:'up',state:true});MoveSound();}
+        else if(event.keyCode === 32){ // space
+            socket.emit('keyPress',{inputId:'space',state:true});dropSound();}
         }
 
         document.onkeyup = function (event){
-            if(event.keyCode === 68) //d 
-            socket.emit('keyPress',{inputId:'right',state:false});
-        else if(event.keyCode === 83) //s
-            socket.emit('keyPress',{inputId:'down',state:false});
-        else if(event.keyCode === 65) //a
-            socket.emit('keyPress',{inputId:'left',state:false});
-        else if(event.keyCode === 87) //w
-            socket.emit('keyPress',{inputId:'up',state:false});
+            if(event.keyCode === 68){ //d 
+            socket.emit('keyPress',{inputId:'right',state:false});moving.pause()}
+        else if(event.keyCode === 83){ //s
+            socket.emit('keyPress',{inputId:'down',state:false});moving.pause()}
+        else if(event.keyCode === 65) {//a
+            socket.emit('keyPress',{inputId:'left',state:false});moving.pause()}
+        else if(event.keyCode === 87) {//w
+            socket.emit('keyPress',{inputId:'up',state:false});moving.pause()}
         else if(event.keyCode === 32) //  space
             socket.emit('keyPress',{inputId:'space',state:false});
         

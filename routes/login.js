@@ -5,6 +5,7 @@ const express = require('express');
 const rootDir = require('../util/path');
 const User= require('../models/User');
 const router = express.Router();
+
 router.get('/', (req, res, next) => {
     res.render('login',{pageTitle:'Login'});
   });
@@ -27,9 +28,5 @@ User.findByLogin(login).then(([rows,data])=>{
     }
 
 })  });
-router.post('/logout',(req, res, next) => {
-  req.session.destroy(()=>{
-    res.redirect('/');
-  })
-})
+
   module.exports = router;

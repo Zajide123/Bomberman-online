@@ -6,7 +6,7 @@ const rootDir = require('../util/path');
 
 const router = express.Router();
 router.get('/newGame', (req, res, next) => {
-  res.render('newGame',{pageTitle:'newGane', isLogedIn:req.isLoggedIn});
+  res.render('newGame',{pageTitle:'newGane', isLogedIn:req.session.isLoggedIn,id:req.session.user.id});
 });
 router.get('/createGame', (req, res, next) => {
   

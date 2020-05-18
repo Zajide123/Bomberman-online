@@ -8,7 +8,8 @@ router.get('/score', (req, res, next) => {
   if(!req.session.isLoggedIn){
     return res.redirect('/')
   }
-  TopScore.findById('1').
+  const id =  req.session.user.user_id;
+  TopScore.findById(id).
   then(([rows,data])=>{
     console.log(rows);
     res.render('score',{pageTitle:'score',
